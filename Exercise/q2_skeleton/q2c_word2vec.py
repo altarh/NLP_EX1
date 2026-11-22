@@ -88,8 +88,8 @@ def neg_sampling_loss_and_gradient(
 
     grad_outside_vecs = np.zeros_like(outside_vectors)
     grad_outside_vecs[outside_word_idx] = -(1 - sigmoid(np.dot(u_o, center_word_vec))) * center_word_vec
-    for i, idx in enumerate(neg_sample_word_indices):
-        grad_outside_vecs[idx] += (1 - sigmoid(-np.dot(outside_vectors[idx], center_word_vec))) * center_word_vec
+    np.add.at(grad_outside_vecs, neg_sample_word_indices,
+              np.outer(1 - sigmoid(-sample @ center_word_vec), center_word_vec))
 
     return loss, grad_center_vec, grad_outside_vecs
 
